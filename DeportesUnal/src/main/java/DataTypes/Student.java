@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author pohlj
  */
-public class Student {
+public class Student implements Comparable<Student>{
  
     //Attributes 
     
@@ -81,6 +81,24 @@ public class Student {
 
     public void removeInterest(String sport) {
         interest.remove(sport);
+    }
+
+    //Se compara los estudiantes de acuerdo a la cantidad de deportes e intereses
+    public int compareTo(Student other){
+        if(this.sports.size() > other.sports.size()){
+            return 1;
+        }else if(this.sports.size() < other.sports.size()){
+            return -1;
+        }else{
+            if(this.interest.size() > other.interest.size()){
+                return 1;
+            }else if(this.interest.size() < other.interest.size()){
+                return -1;
+            }
+            else{
+                return 0;
+            }
+        }
     }
 
     // Para poder imprimir el estudiante
