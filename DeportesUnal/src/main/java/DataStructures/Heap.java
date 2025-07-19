@@ -37,7 +37,7 @@ public class Heap{
 
     //Borrar un estudiante sabiendo su posicion
     public Student delete(int i){
-        if(i > size) return null;
+        if(i > size || i < 0) throw new RuntimeException("Trying to delete a nonexistent position");
         Student deleted = students[i]; 
         Student max = getMax();
         List<String> deletedSports = deleted.getSports();
@@ -50,8 +50,15 @@ public class Heap{
         return deleted;
     }
 
+    public void clear(){
+        int capacity = defaultCapacity;
+        students = new Student[capacity];
+        size = 0;
+        maxSize = capacity;
+    }
+
     public Student extractMax(){
-        if(size == 0) throw new RuntimeException("There are no students to delete");
+        if(size <= 0) throw new RuntimeException("There are no students to delete");
         Student max = getMax();
         swap(0, size - 1);
         size--;
@@ -92,6 +99,10 @@ public class Heap{
         }else{
             return null;
         }
+    }
+
+    public int getSize(){
+        return size;
     }
 
     //Sube un estudiante hasta que el padre sea mayor
