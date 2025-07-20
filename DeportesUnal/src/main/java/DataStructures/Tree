@@ -1,0 +1,60 @@
+import java.util.*;
+
+//Arboles - Registrar cuántos estudiantes practican cada deporte y listarlos en orden.
+public class SportsTree {
+    
+    private SportNode root;
+
+    //Funcion para Recorrer Nodos en INORDEN para guardarlos en una lista
+    private void recolectarNodos(SportNode node, List<SportNode> list) {
+        if (node != null) {
+            recolectarNodos(node.left, list);
+            list.add(node);
+            recolectarNodos(node.right, list);
+        }
+    }
+
+    //Funcion donde imprime los deportes de forma ascendete(Mayor a Menor)
+    public void mostrarPorCantidadAscendente() {
+        List<SportNode> list = new ArrayList<>();
+        recolectarNodos(root, list);
+        list.sort(Comparator.comparingInt(n -> n.counter));
+
+        for (SportNode node : list) {
+            //Salida de nodos con cada nodo con informacion, esta contenida en node.nombre y node.counter
+        }
+    }
+    
+    //Funcion donde imprime los deportes de forma Descendente(Menor a Mayor)
+    public void mostrarPorCantidadDescendente() {
+        List<SportNode> list = new ArrayList<>();
+        recolectarNodos(root, list);
+        list.sort((a, b) -> Integer.compare(b.counter, a.counter));
+
+        for (SportNode node : list) {
+            //Salida de nodos con cada nodo con informacion, esta contenida en node.nombre y node.counter
+        }
+    }
+
+    //Metodo para ingresar al arbol por medio del estudiante(arbol.insertarDeportesDesdeEstudiante(variable_estudiante))
+    public void insertarDeportesDesdeEstudiante(Student student) {
+        for (String sport : student.getSports()) {
+            root = insert(root, sport);
+        }
+    }
+
+    //Inserta un deporte al arbol, lo ingresa comparando alfabeticamente, si es igual suma al contador del deporte
+    private SportNode insert(SportNode node, String sport) {
+        if (node == null) {
+            return new SportNode(sport);
+        }
+        if (sport.compareTo(node.name) < 0) {
+            node.left = insert(node.left, sport);
+        } else if (sport.compareTo(node.name) > 0) {
+            node.right = insert(node.right, sport);
+        } else {
+            node.counter++; // Ya existe el deporte
+        }
+        return node;
+    }
+}
