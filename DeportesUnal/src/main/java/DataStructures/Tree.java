@@ -25,6 +25,7 @@ public class SportsTree {
         }
     }
 
+    //Almacena los nodos y los ordena de forma alfabetica con el compareTo
     private SportNode insert(SportNode node, String sport) {
         if (node == null) return new SportNode(sport);
         if (sport.compareTo(node.name) < 0) {
@@ -32,7 +33,7 @@ public class SportsTree {
         } else if (sport.compareTo(node.name) > 0) {
             node.right = insert(node.right, sport);
         } else {
-            node.counter++;
+            node.counter++; //El deporte ya existe y se suma
         }
         return node;
     }
@@ -46,23 +47,23 @@ public class SportsTree {
         }
     }
 
-    // Orden ascendente
+    // Orden ascendente(Menor a Mayor)
     public void mostrarPorCantidadAscendente() {
         List<SportNode> list = new ArrayList<>();
         recolectarNodos(root, list);
         list.sort(Comparator.comparingInt(n -> n.counter));
         for (SportNode node : list) {
-            System.out.println(node.name + ": " + node.counter + " estudiantes");
+            //Salida de nodos deporte con la informacion
         }
     }
 
-    // Orden descendente
+    // Orden descendente(Mayor a Menor)
     public void mostrarPorCantidadDescendente() {
         List<SportNode> list = new ArrayList<>();
         recolectarNodos(root, list);
         list.sort((a, b) -> Integer.compare(b.counter, a.counter));
         for (SportNode node : list) {
-            System.out.println(node.name + ": " + node.counter + " estudiantes");
+             //Salida de nodos deporte con la informacion
         }
     }
 }
