@@ -25,6 +25,9 @@ public class MainWindow extends JFrame implements ActionListener{
     private JTextField interestStudentField;
     private JTextField infoStudentId;
     private JTextField infoStudentName;
+    private JTextField relationStudent1Id;
+    private JTextField relationStudent2Id;
+    private JTextField relationShowField;
     //Text Area
     private JTextArea studentsListArea;
     private JTextArea infoStudentSportsArea;
@@ -81,6 +84,21 @@ public class MainWindow extends JFrame implements ActionListener{
         JPanel relationInputPanel = new JPanel();
         relationInputPanel.setOpaque(false);
         relationInputPanel.setLayout(new GridLayout(3, 1));
+
+        //Subpanel para ingresar el estudiante 1 a relacionar
+        JPanel relationStudent1Panel = new JPanel();
+        relationStudent1Panel.setOpaque(false);
+        relationStudent1Panel.setLayout(new GridLayout(1, 2));
+
+        //Subpanel para ingresar el estudiante 2 a relacionar
+        JPanel relationStudent2Panel = new JPanel();
+        relationStudent2Panel.setOpaque(false);
+        relationStudent2Panel.setLayout(new GridLayout(1, 2));
+
+        //Subpanel para mostrar si hay relación o no
+        JPanel relationShowPanel = new JPanel();
+        relationShowPanel.setOpaque(false);
+        relationShowPanel.setLayout(new GridLayout(1, 2));
 
         //Panel para ver toda la información de un estudiante
         JPanel infoPanel = new JPanel();
@@ -204,6 +222,22 @@ public class MainWindow extends JFrame implements ActionListener{
         labelInteresesInfoPanel.setFont(normalFont);
         labelInteresesInfoPanel.setOpaque(false);
 
+        //Labels para mostrar la relación de 2 estudiantes
+        //Label para ingresar el nombre del estudiante 1
+        JLabel relationStudent1Label = new JLabel("Estudiante 1:");
+        relationStudent1Label.setFont(normalFont);
+        relationStudent1Label.setOpaque(false);
+
+        //Label para ingresar el nombre del estudiante 2
+        JLabel relationStudent2Label = new JLabel("Estudiante 2:");
+        relationStudent2Label.setFont(normalFont);
+        relationStudent2Label.setOpaque(false);
+
+        //Label donde se muestra la relación entre estudiantes
+        JLabel relationShowLabel = new JLabel("Relación:");
+        relationShowLabel.setFont(normalFont);
+        relationShowLabel.setOpaque(false);
+
         //Botones
         //Boton para consultar los estudiantes
         getStudentsButton = new JButton("Consultar");
@@ -289,6 +323,19 @@ public class MainWindow extends JFrame implements ActionListener{
         infoStudentName.setText("");
         infoStudentName.setEditable(false);
 
+        //Text fields para el panel de relación
+        //Text field para ingresar el id del estudiante 1
+        relationStudent1Id = new JTextField();
+        relationStudent1Id.setText("Id estudiante 1");
+
+        //Text field para ingresar el id del estudiante 2
+        relationStudent2Id = new JTextField();
+        relationStudent2Id.setText("Id estudiante 2");
+
+        //Text field para mostrar el tipo de relacion que hay entre los estudiantes
+        relationShowField = new JTextField();
+        relationShowField.setEditable(false);
+
         //Text Areas
         //Text area para la lista de estudiantes
         studentsListArea = new JTextArea();
@@ -354,6 +401,15 @@ public class MainWindow extends JFrame implements ActionListener{
 
         //Añadiendo a relationPanel
         relationPanel.add(titleRelationPanel, BorderLayout.NORTH);
+        relationStudent1Panel.add(relationStudent1Label);
+        relationStudent1Panel.add(relationStudent1Id);
+        relationInputPanel.add(relationStudent1Panel);
+        relationStudent2Panel.add(relationStudent2Label);
+        relationStudent2Panel.add(relationStudent2Id);
+        relationInputPanel.add(relationStudent2Panel);
+        relationShowPanel.add(relationShowLabel);
+        relationShowPanel.add(relationShowField);
+        relationInputPanel.add(relationShowPanel);
         relationPanel.add(relationInputPanel, BorderLayout.CENTER);
         relationPanel.add(searchRelationButton, BorderLayout.SOUTH);
 
