@@ -13,49 +13,41 @@ public class GraphTest {
         
         // Create students
         Student alice = new Student(1, "Alice");
-        alice.addInterest("Basketball");
+        
+        alice.addSport("Basketball");  // Alice ↔ Bob (direct)
+        alice.addInterest("Soccer");
         
         Student bob = new Student(2, "Bob");
         bob.addSport("Basketball");  // Alice ↔ Bob (direct)
+        bob.addSport("Soccer");  // Alice ↔ Bob (direct)
+
         bob.addInterest("Swimming");
         
-        Student charlie = new Student(3, "Charlie");
-        charlie.addSport("Swimming"); // Bob ↔ Charlie (direct)
-        charlie.addInterest("Chess");
+        Student pablo = new Student(3, "Pablo");
+        pablo.addSport("Soccer");  // Alice ↔ Bob (direct)
+        bob.addInterest("Swimming");
         
-        Student topo = new Student(4, "Topo");
-        topo.addSport("Chess");       // Charlie ↔ Topo (direct)
-        
-        // Build graph (add in order to see connections form)
-        System.out.println("\nAdding Alice:");
-        graph.addVertex(alice);
-        printConnections(graph, alice);
-        
-        System.out.println("\nAdding Bob:");
+        graph.addVertex(alice);  // Alice ↔ Bob
+
         graph.addVertex(bob);  // Alice ↔ Bob
+
+        graph.addVertex(pablo);  // Alice ↔ Bob
+
         printConnections(graph, alice);
         printConnections(graph, bob);
+
+       
+    
         
-        System.out.println("\nAdding Charlie:");
-        graph.addVertex(charlie); // Bob ↔ Charlie
-        printConnections(graph, bob);
-        printConnections(graph, charlie);
-        
-        System.out.println("\nAdding Topo:");
-        graph.addVertex(topo);  // Charlie ↔ Topo
-        printConnections(graph, charlie);
-        printConnections(graph, topo);
-        
+ 
         // Test indirect connections
         System.out.println("\n=== Indirect Connection Results ===");
         
-        Set<Student> aliceConnections = graph.findAllConnectedStudents(alice);
-        System.out.println("Alice's network (direct + indirect):");
+        Set<Student> aliceConnections = graph.findStudentsMatchingInterests(alice);
+        System.out.println("alice's network (direct + indirect):");
         aliceConnections.forEach(s -> System.out.println("- " + s.getName())); 
         // Expected: Bob, Charlie, Topo
-        
-        System.out.println("\nIs Alice indirectly connected to Topo? " + 
-            aliceConnections.contains(topo));  // true (Alice → Bob → Charlie → Topo)
+      
     }
     
     private static void printConnections(Graph graph, Student student) {

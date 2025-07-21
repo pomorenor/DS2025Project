@@ -84,9 +84,9 @@ public class Graph {
             throw new IllegalArgumentException("Both students must exist in the graph");
         }
         
-        boolean theyShareSport = student_a.getInterest().stream().anyMatch(sport -> student_b.getSports().contains(sport))
-                || student_a.getSports().stream().anyMatch(sport -> student_b.getSports().contains(sport));   
-    
+        boolean theyShareSport = student_a.getSports().stream().anyMatch(sport -> student_b.getSports().contains(sport));
+                   
+  
         if(theyShareSport) {
             //We have an undirected graph, so add edge to both lists corresponding to the students
             adjacencyMap.get(student_a).add(student_b);
@@ -137,17 +137,11 @@ public class Graph {
         if (existingStudent.equals(newStudent)) continue;
         
         // Directly implement connection logic here to avoid recursion
-        boolean shouldConnect = 
-            newStudent.getInterest().stream()
-                .anyMatch(interest -> existingStudent.getSports().contains(interest))
-            ||
-            existingStudent.getInterest().stream()
-                .anyMatch(interest -> newStudent.getSports().contains(interest))
-            ||
+        boolean shareSport = 
             newStudent.getSports().stream()
                 .anyMatch(sport -> existingStudent.getSports().contains(sport));
-        
-        if (shouldConnect && !adjacencyMap.get(newStudent).contains(existingStudent)) {
+          
+        if (shareSport && !adjacencyMap.get(newStudent).contains(existingStudent)) {
             adjacencyMap.get(newStudent).add(existingStudent);
             adjacencyMap.get(existingStudent).add(newStudent);
             }
@@ -155,61 +149,39 @@ public class Graph {
     }
     
     // Graph traversing algorithms
-    
-    private boolean isConnected(Student a, Student b){
-        if(!adjacencyMap.containsKey(a) || !adjacencyMap.containsKey(b)){
-            return false;
-        }
-        
-        Set<Student> visited = new HashSet<>();
-        Queue<Student> queue = new LinkedList<>();
-        
-        queue.add(a);
-        visited.add(a);
-        
-        while(!queue.isEmpty()){
-            Student current = queue.poll();
-            if(current.equals(b)){
-                return true;
-            }
-            
-            for(Student neighbor : adjacencyMap.get(current)){
-                if(!visited.contains(neighbor)){
-                    visited.add(neighbor);
-                    queue.add(neighbor);
-                }
-            }
-            
-        }
-        return false;  
-    }
-    
-    
-    public Set<Student> findAllConnectedStudents(Student student) {
-        Set<Student> connectedStudents = new HashSet<>();
-        if (!adjacencyMap.containsKey(student)) {
-            return connectedStudents; // Student not in graph
+   
+    public Set<Student> findStudentsMatchingInterests(Student student) {
+        Set<Student> matches = new HashSet<>();
+        if (!adjacencyMap.containsKey(student) || student.getInterest().isEmpty()) {
+            return matches;
         }
 
-        Queue<Student> queue = new LinkedList<>();
         Set<Student> visited = new HashSet<>();
-    
+        Queue<Student> queue = new LinkedList<>();
         queue.add(student);
         visited.add(student);
 
         while (!queue.isEmpty()) {
             Student current = queue.poll();
+
+        // Verifica si el estudiante actual practica alguno de los intereses del estudiante original
+            boolean isMatch = current != student && 
+                current.getSports().stream()
+                    .anyMatch(sport -> student.getInterest().contains(sport));
         
+            if (isMatch) {
+                matches.add(current); // ¡Encontrado!
+            }
+
+            // Continúa explorando el grafo
             for (Student neighbor : adjacencyMap.get(current)) {
                 if (!visited.contains(neighbor)) {
                     visited.add(neighbor);
-                    connectedStudents.add(neighbor); // Add to result
                     queue.add(neighbor);
                 }
             }
         }
-        return connectedStudents;
+        return matches;
     }
     
-
 }
