@@ -140,49 +140,5 @@ public class Graph {
     }
     
     
-    /**
- * Gets and prints information about all neighbors of a student
- * @param studentId The ID of the student to examine
- */
-public void printConnectedStudents(int studentId) {
-    Student student = studentsIds.get(studentId);
-    if (student == null) {
-        System.out.println("Student with ID " + studentId + " not found in graph.");
-        return;
-    }
 
-    List<Student> neighbors = adjacencyMap.get(student);
-    if (neighbors.isEmpty()) {
-        System.out.println(student.getName() + " (ID: " + studentId + ") has no connections.");
-        return;
-    }
-
-    System.out.println("\nConnection report for: " + student.getName() + " (ID: " + studentId + ")");
-    System.out.println("Shared sports: " + String.join(", ", student.getSports()));
-    System.out.println("Connected to " + neighbors.size() + " student(s):\n");
-
-    for (Student neighbor : neighbors) {
-        // Find shared sports between the student and neighbor
-        List<String> sharedSports = student.getSports().stream()
-                .filter(sport -> neighbor.getSports().contains(sport))
-                .collect(Collectors.toList());
-
-        System.out.println("• " + neighbor.getName() + " (ID: " + neighbor.getId() + ")");
-        System.out.println("  Shared sports: " + String.join(", ", sharedSports));
-        System.out.println("  All sports: " + String.join(", ", neighbor.getSports()));
-        System.out.println();
-    }
-}
-
-/**
- * Overloaded version that accepts Student object directly
- */
-    public void printConnectedStudents(Student student) {
-        if (student == null) {
-            System.out.println("Student cannot be null.");
-            return;
-        }
-        printConnectedStudents(student.getId());
-    }
-    
 }
