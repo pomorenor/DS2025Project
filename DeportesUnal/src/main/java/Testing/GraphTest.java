@@ -19,6 +19,7 @@ public class GraphTest {
         Student bob = new Student(2, "Bob");
         bob.addSport("Swimming");  // Alice ↔ Bob (direct)
         bob.addSport("Soccer");  // Alice ↔ Bob (direct)
+        bob.addSport("Chess");
 
         
         Student pablo = new Student(3, "Pablo");
