@@ -1,55 +1,70 @@
-package Testing;
 
+package Testing;
 import DataTypes.Student;
 import DataStructures.Graph;
 import java.util.List;
+import java.util.Set;
+
 
 public class GraphTest {
     public static void main(String[] args) {
-        System.out.println("=== Testing Graph Connection ===");
+        System.out.println("=== Testing Indirect Connections ===");
         Graph graph = new Graph();
         
-        // Create test students
+        // Create students
         Student alice = new Student(1, "Alice");
         alice.addInterest("Basketball");
-        alice.addSport("Chess");
         
         Student bob = new Student(2, "Bob");
-        bob.addSport("Basketball"); // Matches Alice's interest
+        bob.addSport("Basketball");  // Alice ↔ Bob (direct)
         bob.addInterest("Swimming");
         
-        // Test 1: Add first student
-        System.out.println("\n[Test 1] Adding Alice:");
+        Student charlie = new Student(3, "Charlie");
+        charlie.addSport("Swimming"); // Bob ↔ Charlie (direct)
+        charlie.addInterest("Chess");
+        
+        Student topo = new Student(4, "Topo");
+        topo.addSport("Chess");       // Charlie ↔ Topo (direct)
+        
+        // Build graph (add in order to see connections form)
+        System.out.println("\nAdding Alice:");
         graph.addVertex(alice);
         printConnections(graph, alice);
         
-        // Test 2: Add second student (should connect to Alice)
-        System.out.println("\n[Test 2] Adding Bob:");
-        graph.addVertex(bob);
+        System.out.println("\nAdding Bob:");
+        graph.addVertex(bob);  // Alice ↔ Bob
         printConnections(graph, alice);
         printConnections(graph, bob);
         
-        // Test 3: Try to connect student to themselves
-        System.out.println("\n[Test 3] Attempting self-connection:");
-        System.out.println("Before:");
-        printConnections(graph, alice);
+        System.out.println("\nAdding Charlie:");
+        graph.addVertex(charlie); // Bob ↔ Charlie
+        printConnections(graph, bob);
+        printConnections(graph, charlie);
         
-        System.out.println("Attempting to connect Alice to herself...");
-        graph.addEdge(alice, alice); // Should be skipped due to 'continue'
+        System.out.println("\nAdding Topo:");
+        graph.addVertex(topo);  // Charlie ↔ Topo
+        printConnections(graph, charlie);
+        printConnections(graph, topo);
         
-        System.out.println("After:");
-        printConnections(graph, alice); // Should be unchanged
+        // Test indirect connections
+        System.out.println("\n=== Indirect Connection Results ===");
+        
+        Set<Student> aliceConnections = graph.findAllConnectedStudents(alice);
+        System.out.println("Alice's network (direct + indirect):");
+        aliceConnections.forEach(s -> System.out.println("- " + s.getName())); 
+        // Expected: Bob, Charlie, Topo
+        
+        System.out.println("\nIs Alice indirectly connected to Topo? " + 
+            aliceConnections.contains(topo));  // true (Alice → Bob → Charlie → Topo)
     }
     
     private static void printConnections(Graph graph, Student student) {
-        System.out.println(student.getName() + "'s connections:");
+        System.out.println(student.getName() + "'s direct connections:");
         List<Student> neighbors = graph.getNeighbors(student);
-        
         if (neighbors.isEmpty()) {
             System.out.println("  None");
         } else {
-            neighbors.forEach(neighbor -> 
-                System.out.println("  - " + neighbor.getName()));
+            neighbors.forEach(n -> System.out.println("  - " + n.getName()));
         }
     }
 }

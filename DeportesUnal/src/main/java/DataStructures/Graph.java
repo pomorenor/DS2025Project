@@ -10,6 +10,11 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import DataTypes.Student;
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.Queue;
+import java.util.HashSet;
+import java.util.LinkedList;
+
 
 /*
  I decided to use the adjacencyList implementation of the graph ADT because 
@@ -145,10 +150,66 @@ public class Graph {
         if (shouldConnect && !adjacencyMap.get(newStudent).contains(existingStudent)) {
             adjacencyMap.get(newStudent).add(existingStudent);
             adjacencyMap.get(existingStudent).add(newStudent);
+            }
         }
     }
-}
     
+    // Graph traversing algorithms
+    
+    private boolean isConnected(Student a, Student b){
+        if(!adjacencyMap.containsKey(a) || !adjacencyMap.containsKey(b)){
+            return false;
+        }
+        
+        Set<Student> visited = new HashSet<>();
+        Queue<Student> queue = new LinkedList<>();
+        
+        queue.add(a);
+        visited.add(a);
+        
+        while(!queue.isEmpty()){
+            Student current = queue.poll();
+            if(current.equals(b)){
+                return true;
+            }
+            
+            for(Student neighbor : adjacencyMap.get(current)){
+                if(!visited.contains(neighbor)){
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
+            
+        }
+        return false;  
+    }
+    
+    
+    public Set<Student> findAllConnectedStudents(Student student) {
+        Set<Student> connectedStudents = new HashSet<>();
+        if (!adjacencyMap.containsKey(student)) {
+            return connectedStudents; // Student not in graph
+        }
+
+        Queue<Student> queue = new LinkedList<>();
+        Set<Student> visited = new HashSet<>();
+    
+        queue.add(student);
+        visited.add(student);
+
+        while (!queue.isEmpty()) {
+            Student current = queue.poll();
+        
+            for (Student neighbor : adjacencyMap.get(current)) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    connectedStudents.add(neighbor); // Add to result
+                    queue.add(neighbor);
+                }
+            }
+        }
+        return connectedStudents;
+    }
     
 
 }
