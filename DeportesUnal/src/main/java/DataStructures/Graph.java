@@ -71,11 +71,16 @@ public class Graph {
     
     public void addEdge(Student student_a, Student student_b){
         
+        if (student_a.equals(student_b)) {
+            return; 
+        }
+        
         if(!adjacencyMap.containsKey(student_a) || !adjacencyMap.containsKey(student_b) ){
             throw new IllegalArgumentException("Both students must exist in the graph");
         }
         
-        boolean theyShareSport = student_a.getInterest().stream().anyMatch(sport -> student_b.getSports().contains(sport));   
+        boolean theyShareSport = student_a.getInterest().stream().anyMatch(sport -> student_b.getSports().contains(sport))
+                || student_a.getSports().stream().anyMatch(sport -> student_b.getSports().contains(sport));   
     
         if(theyShareSport) {
             //We have an undirected graph, so add edge to both lists corresponding to the students
@@ -123,21 +128,26 @@ public class Graph {
     
     
     private void createEdgesForNewStudent(Student newStudent) {
-    for (Student existingStudent : adjacencyMap.keySet()) {
-        // Skip self and already connected students
+     for (Student existingStudent : adjacencyMap.keySet()) {
         if (existingStudent.equals(newStudent)) continue;
         
-        // Check if they share any sports
-        boolean shareSports = newStudent.getInterest().stream()
-            .anyMatch(sport -> existingStudent.getSports().contains(sport));
+        // Directly implement connection logic here to avoid recursion
+        boolean shouldConnect = 
+            newStudent.getInterest().stream()
+                .anyMatch(interest -> existingStudent.getSports().contains(interest))
+            ||
+            existingStudent.getInterest().stream()
+                .anyMatch(interest -> newStudent.getSports().contains(interest))
+            ||
+            newStudent.getSports().stream()
+                .anyMatch(sport -> existingStudent.getSports().contains(sport));
         
-        if (shareSports) {
-            // Add bidirectional edge
+        if (shouldConnect && !adjacencyMap.get(newStudent).contains(existingStudent)) {
             adjacencyMap.get(newStudent).add(existingStudent);
             adjacencyMap.get(existingStudent).add(newStudent);
-            }
         }
     }
+}
     
     
 
