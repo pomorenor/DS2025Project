@@ -13,26 +13,32 @@ public class GraphTest {
         
         // Create students
         Student alice = new Student(1, "Alice");
-        
-        alice.addSport("Basketball");  // Alice ↔ Bob (direct)
-        alice.addInterest("Soccer");
+        alice.addSport("Swimming");  // Alice ↔ Bob (direct)
+        alice.addInterest("Chess");
         
         Student bob = new Student(2, "Bob");
-        bob.addSport("Basketball");  // Alice ↔ Bob (direct)
+        bob.addSport("Swimming");  // Alice ↔ Bob (direct)
         bob.addSport("Soccer");  // Alice ↔ Bob (direct)
 
-        bob.addInterest("Swimming");
         
         Student pablo = new Student(3, "Pablo");
         pablo.addSport("Soccer");  // Alice ↔ Bob (direct)
-        bob.addInterest("Swimming");
+        
+        Student topo = new Student(4, "topo");
+        topo.addSport("Soccer");
+        topo.addSport("Chess");
+        
+        Student jesus = new Student(5, "jesus");
+        jesus.addSport("Soccer");
+        jesus.addSport("Chess");
         
         graph.addVertex(alice);  // Alice ↔ Bob
-
         graph.addVertex(bob);  // Alice ↔ Bob
-
         graph.addVertex(pablo);  // Alice ↔ Bob
+        graph.addVertex(topo);  // Alice ↔ Bob
+        graph.addVertex(jesus);  // Alice ↔ Bob
 
+        
         printConnections(graph, alice);
         printConnections(graph, bob);
 
