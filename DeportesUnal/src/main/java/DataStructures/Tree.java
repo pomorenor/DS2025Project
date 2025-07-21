@@ -1,6 +1,9 @@
-import java.util.*;
+package DataStructures;
 
-public class SportsTree {
+import java.util.*;
+import DataTypes.Student;
+
+public class Tree {
 
     private static class SportNode {
         String name;
