@@ -39,7 +39,7 @@ public class MainWindow extends JFrame implements ActionListener{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(1500,1000);
-        this.getContentPane().setBackground(new Color(255,255,200));
+        this.getContentPane().setBackground(new Color(230,230,230));
         this.setLayout(new BorderLayout());
 
         //PANELES
