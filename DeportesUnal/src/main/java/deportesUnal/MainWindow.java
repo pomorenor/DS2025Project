@@ -4,8 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import DataTypes.Student;
+import DataStructures.*;
 
 public class MainWindow extends JFrame implements ActionListener{
+    public hashmap<Student> studentsHash;
+    public Tree studentsTree;
+    public Graph studentsGraph;
+    public Heap studentsHeap;
     //Botones
     private JButton getStudentsButton;
     private JButton getStudentInfoButton;
@@ -34,6 +40,12 @@ public class MainWindow extends JFrame implements ActionListener{
     private JTextArea infoStudentInterestsArea;
 
     MainWindow(){
+        //Crear estructuras
+        studentsHash = new hashmap<>(8);
+        studentsTree = new Tree();
+        studentsHeap = new Heap();
+        studentsGraph = new Graph();
+
         //Ventana Principal (JFrame)
         this.setTitle("Deportes Unal");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -427,11 +439,48 @@ public class MainWindow extends JFrame implements ActionListener{
         if(e.getSource() == getStudentsButton){
             //Implementar la consulta de los estudiantes
         }else if(e.getSource() == getStudentInfoButton){
-            //Implementar obtener la info del estudiante
+            //Obtener la info de un estudiante
+            String studentIdString = infoStudentId.getText();
+            if (studentIdString == ""){
+                return;
+            }
+            int studentId;
+            try{
+                studentId = Integer.parseInt(studentIdString);
+            }catch(Exception ex){
+                return;
+            }
+            Student currStudent = studentsHash.getStudent(studentId);
+            infoStudentName.setText(currStudent.getName());
+            String sportsString = "";
+            String interestsString = "";
+            for (String currSport: currStudent.getSports()){{
+                sportsString = sportsString + currSport + '\n';
+            }}
+            for (String currInterest: currStudent.getInterest()){
+                interestsString = interestsString + currInterest + '\n';
+            }
+            infoStudentSportsArea.setText(sportsString);;
+            infoStudentInterestsArea.setText(interestsString);
         }else if(e.getSource() == searchRelationButton){
             //Implementar la función para ver si hay una relacion entre estudiantes
         }else if(e.getSource() == addStudentButton){
-            //Implementar añadir a un estudiante
+            //Añadir un estudiante
+            String studentName = studentNameField.getText();
+            String studentIdString = studentIdField.getText();
+            if(studentName == "" || studentIdString == ""){
+                return;
+            }
+            int studentId;
+            try{
+                studentId = Integer.parseInt(studentIdString);
+            }catch(Exception exception){
+                return;
+            }
+            Student newStudent = new Student(studentId, studentName);
+            studentsHeap.insert(newStudent);
+            studentsGraph.addVertex(newStudent);
+            studentsHash.insertStudent(newStudent);
         }else if(e.getSource() == deleteStudentButton){
             //Implementar borrar a un estudiante
         }else if(e.getSource() == addSportButton){
