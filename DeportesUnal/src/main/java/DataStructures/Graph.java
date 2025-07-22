@@ -43,6 +43,15 @@ public class Graph {
     /*We are taking the students themselves as vertex, so 
       I might as well call it addStudent
     */
+    
+    public void addVertexNoUpdate(Student student){
+        
+        studentsIds.putIfAbsent(student.getId(), student);
+        adjacencyMap.putIfAbsent(student, new ArrayList<>());
+        //createEdgesForNewStudent(student);
+    }
+    
+    
     public void addVertex(Student student){
         
         studentsIds.putIfAbsent(student.getId(), student);
