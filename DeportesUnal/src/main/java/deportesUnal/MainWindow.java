@@ -442,7 +442,7 @@ public class MainWindow extends JFrame implements ActionListener{
     //Funcionalidad botones
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == getStudentsButton){
-            //TODO
+            //TODO implementar obtención de todos los estudiantes organizados por deporte
             String studentsListText = "";
             //Completar el consultar todos los estudiantes agrupados por cada deporte
             //se debe llenar el string con grupos de nombres por deporte
@@ -488,6 +488,8 @@ public class MainWindow extends JFrame implements ActionListener{
             Student student2 = studentsHash.getStudent(student2Id);
             if(student1 == null || student2 == null) return;
             Set<Student> matches = studentsGraph.findStudentsMatchingInterests(student1);
+            //TODO: fix searching relation
+            //for some reason it does not relate students with same sport when searching matches
             if(matches.contains(student2)){
                 relationShowField.setText("Están relacionados");
             }else{
