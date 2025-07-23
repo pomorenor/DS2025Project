@@ -12,6 +12,7 @@ public class MainWindow extends JFrame implements ActionListener{
     public Tree studentsTree;
     public Graph studentsGraph;
     public Heap studentsHeap;
+    public DSet studentsSet;
     //Botones
     private JButton getStudentsButton;
     private JButton getStudentInfoButton;
@@ -45,6 +46,7 @@ public class MainWindow extends JFrame implements ActionListener{
         studentsTree = new Tree();
         studentsHeap = new Heap();
         studentsGraph = new Graph();
+        studentsSet = new DSet();
 
         //Ventana Principal (JFrame)
         this.setTitle("Deportes Unal");
@@ -485,6 +487,21 @@ public class MainWindow extends JFrame implements ActionListener{
             //Implementar borrar a un estudiante
         }else if(e.getSource() == addSportButton){
             //Implemetar agregar un deporte a un estudiante
+            String newSport = sportNameField.getText();
+            String studentIdString = sportStudentField.getText();
+            if(newSport == "" || studentIdString == ""){
+                return;
+            }
+            int studentId;
+            try {
+                studentId = Integer.parseInt(studentIdString);
+            } catch (Exception ex) {
+                return;
+            }
+            Student currStudent = studentsHash.getStudent(studentId);
+            if(currStudent == null) return;
+            currStudent.addSport(newSport);
+            studentsTree.insertarDeportesDesdeEstudiante(currStudent);
         }else if(e.getSource() == deleteSportButton){
             //Implementar borrar un deporte de un estudiante
         }else if(e.getSource() == addInterestButton){
