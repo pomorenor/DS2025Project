@@ -501,11 +501,24 @@ public class MainWindow extends JFrame implements ActionListener{
             Student currStudent = studentsHash.getStudent(studentId);
             if(currStudent == null) return;
             currStudent.addSport(newSport);
-            studentsTree.insertarDeportesDesdeEstudiante(currStudent);
         }else if(e.getSource() == deleteSportButton){
             //Implementar borrar un deporte de un estudiante
         }else if(e.getSource() == addInterestButton){
             //Implementar agregar un interés a un estudiante
+            String newInterest = interestNameField.getText();
+            String studentIdString = interestStudentField.getText();
+            if(newInterest == "" || studentIdString == ""){
+                return;
+            }
+            int studentId;
+            try {
+                studentId = Integer.parseInt(studentIdString);
+            } catch (Exception ex) {
+                return;
+            }
+            Student currStudent = studentsHash.getStudent(studentId);
+            if (currStudent == null) return;
+            currStudent.addInterest(newInterest);
         }else if(e.getSource() == deleteInterestButton){
             //Implemetar eliminar un interés de un estudiante
         }
