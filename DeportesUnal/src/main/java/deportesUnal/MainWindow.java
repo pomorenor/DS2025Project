@@ -107,9 +107,9 @@ public class MainWindow extends JFrame implements ActionListener{
         relationStudent1Panel.setLayout(new GridLayout(1, 2));
 
         //Subpanel para ingresar el estudiante 2 a relacionar
-        JPanel relationStudent2Panel = new JPanel();
-        relationStudent2Panel.setOpaque(false);
-        relationStudent2Panel.setLayout(new GridLayout(1, 2));
+        //JPanel relationStudent2Panel = new JPanel();
+        //relationStudent2Panel.setOpaque(false);
+        //relationStudent2Panel.setLayout(new GridLayout(1, 2));
 
         //Subpanel para mostrar si hay relación o no
         JPanel relationShowPanel = new JPanel();
@@ -420,9 +420,9 @@ public class MainWindow extends JFrame implements ActionListener{
         relationStudent1Panel.add(relationStudent1Label);
         relationStudent1Panel.add(relationStudent1Id);
         relationInputPanel.add(relationStudent1Panel);
-        relationStudent2Panel.add(relationStudent2Label);
-        relationStudent2Panel.add(relationStudent2Id);
-        relationInputPanel.add(relationStudent2Panel);
+       // relationStudent2Panel.add(relationStudent2Label);
+       // relationStudent2Panel.add(relationStudent2Id);
+       // relationInputPanel.add(relationStudent2Panel);
         relationShowPanel.add(relationShowLabel);
         relationShowPanel.add(relationShowField);
         relationInputPanel.add(relationShowPanel);
@@ -474,26 +474,39 @@ public class MainWindow extends JFrame implements ActionListener{
         }else if(e.getSource() == searchRelationButton){
             //Implementar la función para ver si hay una relacion entre estudiantes
             String student1IdString = relationStudent1Id.getText();
-            String student2IdString = relationStudent2Id.getText();
+            //String student2IdString = relationStudent2Id.getText();
             int student1Id;
-            int student2Id;
-            if(student1IdString == "" || student2IdString == "") return;
+            if(student1IdString == "") return;
             try {
                 student1Id = Integer.parseInt(student1IdString);
-                student2Id = Integer.parseInt(student2IdString);
             } catch (Exception ex) {
                 return;
             }
             Student student1 = studentsHash.getStudent(student1Id);
-            Student student2 = studentsHash.getStudent(student2Id);
-            if(student1 == null || student2 == null) return;
+           
+            if(student1 == null) return;
             Set<Student> matches = studentsGraph.findStudentsMatchingInterests(student1);
+            
+            for (Student element : matches) {
+                System.out.println(element.getName());    
+            }
+            System.out.println("pato");
             //TODO: fix searching relation
             //for some reason it does not relate students with same sport when searching matches
-            if(matches.contains(student2)){
-                relationShowField.setText("Están relacionados");
-            }else{
-                relationShowField.setText("No están relacionados");
+            //System.out.println("Student 1 neighbors: " + studentsGraph.getNeighbors(student1));
+            if (!matches.isEmpty()) {
+                StringBuilder sb = new StringBuilder("Estudiantes relacionados: ");
+                for (Student student : matches) {
+                    sb.append(student.getName()).append(", ");
+                    sb.append(" Id: ");
+                    sb.append(student.getId()).append(", ");
+                    
+                }
+                // Elimina la última coma y espacio
+                String result = sb.substring(0, sb.length() - 2);
+                relationShowField.setText(result);
+            } else {
+                relationShowField.setText("No hay estudiantes relacionados");
             }
         }else if(e.getSource() == addStudentButton){
             //Añadir un estudiante
@@ -544,6 +557,7 @@ public class MainWindow extends JFrame implements ActionListener{
             Student currStudent = studentsHash.getStudent(studentId);
             if(currStudent == null) return;
             currStudent.addSport(newSport);
+            studentsGraph.updateEdgesForStudent(currStudent);
         }else if(e.getSource() == deleteSportButton){
             //Implementar borrar un deporte de un estudiante
             String deletedSport = sportNameField.getText();
@@ -560,6 +574,8 @@ public class MainWindow extends JFrame implements ActionListener{
             Student currStudent = studentsHash.getStudent(studentId);
             if(currStudent == null) return;
             currStudent.removeSport(deletedSport);
+            studentsGraph.updateEdgesForStudent(currStudent);
+
         }else if(e.getSource() == addInterestButton){
             //Implementar agregar un interés a un estudiante
             String newInterest = interestNameField.getText();
@@ -574,8 +590,12 @@ public class MainWindow extends JFrame implements ActionListener{
                 return;
             }
             Student currStudent = studentsHash.getStudent(studentId);
+           // studentsGraph.updateEdgesForStudent(currStudent);
+
             if (currStudent == null) return;
             currStudent.addInterest(newInterest);
+            studentsGraph.updateEdgesForStudent(currStudent);
+
         }else if(e.getSource() == deleteInterestButton){
             //Implemetar eliminar un interés de un estudiante
             String deletedInterest = interestNameField.getText();
@@ -591,7 +611,9 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             Student currStudent = studentsHash.getStudent(studentId);
             if (currStudent == null) return;
-            currStudent.removeInterest(deletedInterest);
+            currStudent.removeInterest(deletedInterest);    
+            studentsGraph.updateEdgesForStudent(currStudent);
+
         }
     }
 }

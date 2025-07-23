@@ -193,4 +193,20 @@ public class Graph {
         return matches;
     }
     
+    
+    public void updateEdgesForStudent(Student student) {
+        if (!adjacencyMap.containsKey(student)) {
+            return;
+        }
+    
+    // Remove all existing edges for this student
+        for (Student neighbor : adjacencyMap.get(student)) {
+            adjacencyMap.get(neighbor).remove(student);
+        }
+        adjacencyMap.get(student).clear();
+    
+    // Recreate edges based on current sports
+        createEdgesForNewStudent(student);
+    }
+    
 }
